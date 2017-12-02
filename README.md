@@ -1,2 +1,2 @@
 # CuratorBackEnd
-database for yhacks
+backend for yhacks
