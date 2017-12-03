@@ -24,7 +24,7 @@ def get_all_articles():
                        'id': str(q['_id']),
                        'realCount': q['realCount'],
                        'fakeCount': q['fakeCount']})
-        # output.sort(key=operator.itemgetter('publishedAt'))
+        output.sort(key=operator.itemgetter('publishedAt'))
 
     return jsonify({'result': output})
 
@@ -33,26 +33,26 @@ def get_all_articles():
 def edit_article():
     articles = mongo.db.articles
     article = articles.find_one({"_id": ObjectId(request.json['id'])})
-    # article = articles.find_one({'title': "Australian deputy PM wins back seat"})
-    # print(request.json['id'])
-    print(article)
-    next_real_count = article['realCount']
-    next_fake_count = article['fakeCount']
-    if request.json['isReal']:
-        next_real_count += 1
-    else:
-        next_fake_count += 1
-    articles.update_one(
-        {"_id": ObjectId(request.json['id'])},
-        {
-            '$set': {
-                'realCount': next_real_count,
-                'fakeCount': next_fake_count
+    try:
+        next_real_count = article['realCount']
+        next_fake_count = article['fakeCount']
+        if request.json['isReal']:
+            next_real_count += 1
+        else:
+            next_fake_count += 1
+        articles.update_one(
+            {"_id": ObjectId(request.json['id'])},
+            {
+                '$set': {
+                    'realCount': next_real_count,
+                    'fakeCount': next_fake_count
+                }
             }
-        }
-    )
-    result = articles.find_one({"_id": ObjectId(request.json['id'])})
-    return jsonify({'result': result})
+        )
+        output = "Successfully updated!"
+    except:
+        output = "Error! Please try again later."
+    return jsonify({'result': output})
 
 
 @app.route('/')
