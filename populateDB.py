@@ -16,19 +16,19 @@ client = MongoClient('mongodb://admin:password@ds125906.mlab.com:25906/curatordb
 db = client['curatordb']
 collection = db['articles']
 article_data = '{"title": "blank", "description": "blank", "url": "blank", "urlToImage": "blank, "publishedAt": "blank"}'
-resp = requests.get("https://newsapi.org/v2/top-headlines?sources=cnn&apiKey=00e6dda1c34d4ae98cf853601c2a6d11")
+resp = requests.get("https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=00e6dda1c34d4ae98cf853601c2a6d11")
 data = json.loads(resp.text)
 data = data['articles']
 
-#collection.insert_one({'title': 'Melania Trump Hangs Decayed Badger Carcass Over White House Mantel To Finish Off Traditional Slovenian Christmas Decor', 'description': description, 'url': url, 'urlToImage': urlToImage, 'publishedAt': publishedAt, 'realCount': 0, 'fakeCount': 0 })
-for obj in data:
-    title = obj['title']
-    description = obj['description']
-    url = obj['url']
-    urlToImage = obj['urlToImage']
-    publishedAt = obj['publishedAt']
-    print title
-    print publishedAt
-    publishedAt = parse(publishedAt)
-    collection.insert_one({'title': title, 'description': description, 'url': url, 'urlToImage': urlToImage, 'publishedAt': publishedAt, 'realCount': 0, 'fakeCount': 0 })
+collection.insert_one({'title': 'Sometimes It Feels Like You’re The Only One Who Understands Me, Whispers Trump To White House Roach Infestation', 'description': 'Saying that its presence had been a valuable source of comfort at a difficult time, President Trump reportedly told the White House cockroach infestation on Friday that it alone truly understood him.', 'url': 'https://politics.theonion.com/sometimes-it-feels-like-you-re-the-only-one-who-unders-1820927327', 'urlToImage': 'https://i.kinja-img.com/gawker-media/image/upload/s--ud_PVt6r--/c_scale,fl_progressive,q_80,w_800/kajcvqfd6wrtp5w3tbbj.jpg', 'publishedAt': '2017-12-02T22:58:57Z', 'realCount': 0, 'fakeCount': 0 })
+# for obj in data:
+#     title = obj['title']
+#     description = obj['description']
+#     url = obj['url']
+#     urlToImage = obj['urlToImage']
+#     publishedAt = obj['publishedAt']
+#     if publishedAt is None:
+#         continue
+#     publishedAt = parse(publishedAt)
+#     collection.insert_one({'title': title, 'description': description, 'url': url, 'urlToImage': urlToImage, 'publishedAt': publishedAt, 'realCount': 0, 'fakeCount': 0 })
 print 'done'
