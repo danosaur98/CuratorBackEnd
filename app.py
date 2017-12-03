@@ -1,6 +1,6 @@
 import operator
 from flask import Flask, jsonify, request
-from flask_pymongo import PyMongo
+from flask_pymongo import PyMongo, ObjectId
 
 app = Flask(__name__)
 
@@ -24,7 +24,7 @@ def get_all_articles():
                        'id': str(q['_id']),
                        'realCount': q['realCount'],
                        'fakeCount': q['fakeCount']})
-        #output.sort(key=operator.itemgetter('publishedAt'))
+        # output.sort(key=operator.itemgetter('publishedAt'))
 
     return jsonify({'result': output})
 
@@ -32,17 +32,18 @@ def get_all_articles():
 @app.route('/rate', methods=['POST'])
 def edit_article():
     articles = mongo.db.articles
-    article = articles.find_one({'id': request.json['id']})
-    print(request.json['id'])
+    article = articles.find_one({"_id": ObjectId(request.json['id'])})
+    # article = articles.find_one({'title': "Australian deputy PM wins back seat"})
+    # print(request.json['id'])
     print(article)
     next_real_count = article['realCount']
     next_fake_count = article['fakeCount']
-    if article['isReal']:
+    if request.json['isReal']:
         next_real_count += 1
     else:
         next_fake_count += 1
     articles.update_one(
-        {'id': request.json['id']},
+        {"_id": ObjectId(request.json['id'])},
         {
             '$set': {
                 'realCount': next_real_count,
@@ -50,8 +51,8 @@ def edit_article():
             }
         }
     )
-    return jsonify(articles.find({'id': request.json['id']})
-)
+    result = articles.find_one({"_id": ObjectId(request.json['id'])})
+    return jsonify({'result': result})
 
 
 @app.route('/')
